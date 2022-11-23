@@ -1,0 +1,174 @@
+LinkedList* ll_filter(LinkedList* this, int (*pFunc)(void*))
+{
+    LinkedList* newList = NULL;
+    void* pElement;
+
+    int length;
+    int i;
+
+    if(this != NULL && pFunc != NULL)
+    {
+        length = ll_len(this);
+
+	if(length > 0)
+	{
+            newList = ll_newLinkedList();
+
+            if(newList != NULL)
+            {
+               for(i = 0; i < length; i++)
+               {
+                  pElement = ll_get(this, i);
+
+                  if(!pFunc(pElement))
+                  {
+                     ll_add(newList, pElement);
+                  }
+               }
+            }
+
+	    if(ll_isEmpty(newList))
+	    {
+		free(newList);
+		newList = NULL;
+	    }
+        }
+    }
+
+    return newList;
+}
+
+int ll_filter(LinkedList* this, int (*pFunc)(void*))
+{
+    int toReturn = -1;
+    void* pElement;
+
+    int len;    
+    int i = 0;
+
+    if(this != NULL && pFunc != NULL)
+    {
+       len = ll_len(this); 
+
+       if(len > 0)
+       {
+           while(i < len)
+           {
+              pElement = ll_get(this, i);
+
+              if(pFunc(pElement))
+              {
+                  ll_remove(this, i);
+                  len--;
+              }
+	      else
+	      {
+		  i++;
+	      }
+	   }
+        }
+
+	if(len > 0)
+	{
+	    toReturn = 0;
+	}
+    }
+
+    return toReturn;
+}
+
+int ll_map(LinkedList* this, int (*pFunc)(void*))
+{
+    int toReturn = -1;
+    
+    int i;
+    int len;
+
+    void* pElement;
+
+    if(this != NULL && pFunc != NULL)
+    {
+        len = ll_len(this);
+
+		if(len > 0)
+		{
+			for(i = 0; i < len; i++)
+			{
+				pElement = ll_get(this, i);
+
+				pFunc(pElement);
+			}
+
+			toReturn = 0;
+		}
+    }
+
+    return toReturn;
+}
+
+int ll_count(LinkedList* this, int (*pFunc)(void*))
+{
+    int counter = -1;
+    int len;
+    int i;
+
+    void* pElement;
+    int auxReturn;
+
+    if(this != NULL && pFunc != NULL)
+    {
+        counter = 0;
+
+        len = ll_len(this);
+
+        for(i = 0; i < len; i++)
+        {
+            pElement = ll_get(this, i);
+
+	    auxReturn = pFunc(pElement);
+
+	    if(auxReturn > 0)
+	    {
+            	counter += auxReturn;
+	    }
+        }
+    }
+
+    return counter;
+}
+
+/*VERSION CON BUCLE ASCENDENTE*/
+int ll_clear(LinkedList* this)
+{
+    int auxReturn = -1;
+    int length;
+    int i = 0;
+
+    if(this != NULL)
+    {
+        length = ll_len(this);
+        
+        if(length > 0)
+        {
+            while(i < length)
+            {
+                if(!ll_remove(this, i))
+                {
+                    length--;
+                }
+                
+                else
+                {
+                    break;
+                }
+            }
+            
+            if(length == 0)
+            {
+                auxReturn = 0;
+            }
+        }
+    }
+
+    return auxReturn;
+}
